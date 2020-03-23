@@ -78,8 +78,8 @@ class Inbox extends Component {
                 time: time,
                 from: auth.currentUser.uid
             }
-            updates['messages/' +auth.currentUser.uid + '/' +this.state.person.uid + '/' + msgId] = message
-            updates['messages/' +this.state.person.uid + '/' +auth.currentUser.uid + '/' + msgId] = message
+            updates['messages/' + auth.currentUser.uid + '/' + this.state.person.uid + '/' + msgId] = message
+            updates['messages/' + this.state.person.uid + '/' + auth.currentUser.uid + '/' + msgId] = message
             db.ref().update(updates);
             this.setState({ textMessage: '' })
         }
@@ -95,35 +95,47 @@ class Inbox extends Component {
                 })
             })
     }
+    convertTime = (time) => {
+        let d = new Date(time);
+        let c = new Date();
+        let result = (d.getHours() < 10 ? '0' : '' ) + d.getHours() + ':';
+        result += (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+        // if(c.getDay() !== d.getDay()) {
+        //     result = d.getDay() + '' + d.getMonth() + '' + result;
+        // } 
+        return result
+    }
     renderRow = ({ item }) => {
         // console.log(item)
+        const Check = () => {
+            if (item.from === auth.currentUser.uid) {
+                return (
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                            <Text style={{ alignSelf: 'flex-end', marginRight: 30, color: '#B8B8B8' }}>{this.convertTime(item.time)}</Text>
+                        </View>
+                        <View style={styles.chat1}>
+                            <Text style={{ color: item.from === auth.currentUser.uid ? 'white' : '#464646' }}>{item.message} </Text>
+                        </View>
+                    </View>
+                )
+            }
+            else {
+                return (
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={styles.chat2}>
+                            <Text style={{ color: '#464646' }}>Oh my way home but o needed to stop by the book store to ...... </Text>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center' }}>
+                            <Text style={{ alignSelf: 'flex-start', marginLeft: 30, color: '#B8B8B8' }}>{this.convertTime(item.time)}</Text>
+                        </View>
+                    </View>
+                )
+            }
+        }
         return (
             <View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <Text style={{ alignSelf: 'flex-end', marginRight: 30, color: '#B8B8B8' }}>12.30</Text>
-                    </View>
-                    <View style={{
-                        backgroundColor: item.from === auth.currentUser.uid ? '#5579F1' : '#E2E5F5' ,
-                        marginTop: 20,
-                        width: 200,
-                        padding: 20,
-                        borderBottomLeftRadius: item.from === auth.currentUser.uid ? 30 : 0,
-                        borderBottomRightRadius: item.from === auth.currentUser.uid ? 0 : 30,
-                        borderTopLeftRadius: 30,
-                        borderTopRightRadius: 30
-                    }}>
-                        <Text style={{ color: item.from === auth.currentUser.uid ? 'white':'#B8B8B8' }}>{item.message} </Text>
-                    </View>
-                </View>
-                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <View style={styles.chat2}>
-                        <Text style={{ color: '#464646' }}>Oh my way home but o needed to stop by the book store to ...... </Text>
-                    </View>
-                    <View style={{ flex: 1, justifyContent: 'center' }}>
-                        <Text style={{ alignSelf: 'flex-start', marginLeft: 30, color: '#B8B8B8' }}>12.30</Text>
-                    </View>
-                </View> */}
+                <Check />
             </View>
         )
     }
