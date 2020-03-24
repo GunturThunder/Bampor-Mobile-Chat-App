@@ -58,10 +58,11 @@ class Inbox extends Component {
         this.state = {
             person: {
                 name: props.navigation.getParam('name'),
-                uid: props.navigation.getParam('uid')
+                uid: props.navigation.getParam('uid'),
             },
             textMessage: '',
-            messageList: []
+            messageList: [],
+            user: []
         }
     }
 
@@ -98,12 +99,20 @@ class Inbox extends Component {
     convertTime = (time) => {
         let d = new Date(time);
         let c = new Date();
-        let result = (d.getHours() < 10 ? '0' : '' ) + d.getHours() + ':';
+        let result = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':';
         result += (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
         // if(c.getDay() !== d.getDay()) {
         //     result = d.getDay() + '' + d.getMonth() + '' + result;
         // } 
         return result
+    }
+    renderRowProfile = ({ item }) => {
+        return (
+            <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop: 5 }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>Zlatan Ibrahimovic</Text>
+                <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../img/profile1.png')} />
+            </View>
+        )
     }
     renderRow = ({ item }) => {
         // console.log(item)
@@ -124,7 +133,7 @@ class Inbox extends Component {
                 return (
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={styles.chat2}>
-                            <Text style={{ color: '#464646' }}>Oh my way home but o needed to stop by the book store to ...... </Text>
+                            <Text style={{ color: '#464646' }}>{item.message}</Text>
                         </View>
                         <View style={{ flex: 1, justifyContent: 'center' }}>
                             <Text style={{ alignSelf: 'flex-start', marginLeft: 30, color: '#B8B8B8' }}>{this.convertTime(item.time)}</Text>
@@ -142,6 +151,7 @@ class Inbox extends Component {
     render() {
         // console.log(props.navigation.getParam('uid'))
         // console.log(this.state.messageList)
+        console.log(auth.currentUser.uid)
         return (
 
             <View style={styles.wrap}>
@@ -149,8 +159,11 @@ class Inbox extends Component {
                     <View style={{ marginHorizontal: 20, marginVertical: 8 }}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}><Icon style={{ color: 'white', fontSize: 25 }} name="ios-arrow-back" /></TouchableOpacity>
                         <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop: 5 }}>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>Zlatan Ibrahimovic</Text>
-                            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../img/profile1.png')} />
+                            <FlatList
+                                data={this.state.person.name}
+                                renderItem={this.renderRowProfile}
+                                keyExtractor={(item) => item.uid}
+                            />
                         </View>
                         <Text style={{ fontSize: 12, color: 'white', marginTop: -15 }}>Busy</Text>
                     </View>
