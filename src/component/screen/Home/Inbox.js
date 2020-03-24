@@ -160,7 +160,7 @@ class Inbox extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}><Icon style={{ color: 'white', fontSize: 25 }} name="ios-arrow-back" /></TouchableOpacity>
                         <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop: 5 }}>
                             <FlatList
-                                data={this.state.person.name}
+                                data={this.state.person.uid}
                                 renderItem={this.renderRowProfile}
                                 keyExtractor={(item) => item.uid}
                             />
@@ -193,14 +193,14 @@ class Inbox extends Component {
                                 </View>
                             </View>
                             <ActionButton buttonColor="rgba(231,76,60,1)">
-                                <ActionButton.Item buttonColor='#9b59b6' title="Emoticons" onPress={() => { }}>
+                                <ActionButton.Item buttonColor='#9b59b6' title="Emoticons">
                                     <Icon name="ios-happy" style={styles.actionButtonIcon} />
                                 </ActionButton.Item>
-                                <ActionButton.Item buttonColor='#3498db' title="Picture" onPress={() => { }}>
+                                <ActionButton.Item buttonColor='#3498db' title="Picture">
                                     <Icon name="ios-camera" style={styles.actionButtonIcon} />
                                 </ActionButton.Item>
-                                <ActionButton.Item buttonColor='#1abc9c' title="Shere Location" onPress={() => { }}>
-                                    <Icon name="ios-compass" style={styles.actionButtonIcon} />
+                                <ActionButton.Item buttonColor='#1abc9c' title="Shere Location">
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Location')}><Icon name="ios-compass" style={styles.actionButtonIcon} /></TouchableOpacity>
                                 </ActionButton.Item>
                             </ActionButton>
                         </View>

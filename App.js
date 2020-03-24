@@ -8,6 +8,7 @@ import HomeScreen from './src/component/screen/Home/Home';
 import LoginScreen from './src/component/screen/User/Login';
 import RegisterScreen from './src/component/screen/User/Register';
 import InboxScreen from './src/component/screen/Home/Inbox';
+import LocationScreen from './src/component/screen/Location/Location';
 
 const homeNavigator = createStackNavigator({
   // Home : HomeScreen
@@ -36,6 +37,12 @@ const homeNavigator = createStackNavigator({
       header: false,
     }
   },
+  Location:{
+    screen: LocationScreen,
+    navigationOptions:{
+      header:false,
+    }
+  }
 })
 const AppNavigator = createSwitchNavigator({
   Home: homeNavigator,
