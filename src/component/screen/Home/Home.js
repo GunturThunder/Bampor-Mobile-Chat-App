@@ -7,6 +7,7 @@ import { Icon, Header, Tab, Tabs, TabHeading } from 'native-base';
 import ChatScreen from './ChatScreen';
 import StatusScreen from './StatusScreen';
 import CallScreen from './CallScreen';
+import GetLocation from 'react-native-get-location'
 
 const styles = StyleSheet.create({
     wrap: {
@@ -24,6 +25,33 @@ const styles = StyleSheet.create({
 })
 
 class Home extends Component {
+    state = {
+        users: [],
+        latitude: '',
+        longitude: ''
+      }
+  
+      getLocation(){
+        const id = auth.currentUser.uid
+        GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 15000
+        })
+        .then(location => {
+          db.ref('/user/' + id ).child("latitude").set(location.latitude)
+          db.ref('/user/' + id ).child("longitude").set(location.longitude)
+        })
+        .catch(error => {
+          const { code, message} = error;
+          console.warn(code, message);
+        })
+        this._isMounted = true;
+      }
+  
+      componentDidMount(){
+        this.getLocation()
+      }
+      
     handleLogout = () => {
         // Action Logout
         auth.signOut()

@@ -3,6 +3,7 @@ import { View, Text, ToastAndroid, StyleSheet, Image, TextInput } from 'react-na
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Container, Header, Content, Form, Item, Input } from 'native-base';
 import { auth, db } from "../../Config/Config";
+import GetLocation from 'react-native-get-location'
 
 const styles = StyleSheet.create({
     wrap: {
@@ -26,11 +27,26 @@ class Register extends Component {
             errorMessage: null,
             loading: false,
             updatesEnabled: false,
+            location: []
         }
         this.handleSignUp = this.handleSignUp.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        await GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 15000,
+        })
+            .then(location => {
+                console.log(location);
+                this.setState({
+                    location: location
+                })
+            })
+            .catch(error => {
+                const { code, message } = error;
+                console.warn(code, message);
+            })
         this._isMounted = true;
 
     };
@@ -47,7 +63,7 @@ class Register extends Component {
         });
     };
 
-    handleSignUp = async () => { 
+    handleSignUp = async () => {
         const { email, name, password } = this.state;
         if (name.length < 1) {
             ToastAndroid.show('Please input your fullname', ToastAndroid.LONG);
@@ -72,7 +88,9 @@ class Register extends Component {
                             name: this.state.name,
                             status: 'Online',
                             email: this.state.email,
-                            photo: "http://photourl.com/photo"
+                            photo: "http://photourl.com/photo",
+                            longitude: this.state.location.longitude,
+                            latitude: this.state.location.latitude
                         })
                         .catch(error => console.log(error.message))
 
@@ -85,7 +103,7 @@ class Register extends Component {
                             displayName: this.state.name,
                             photoURL: "http://linkphoto.com"
                         }).then((s) => {
-                            this.props.navigation.navigate("Login")
+                            this.props.navigation.navigate('Login')
                         })
                     }
 
@@ -93,10 +111,12 @@ class Register extends Component {
                 })
                 .catch(error => {
                     ToastAndroid.show(error.message, ToastAndroid.LONG)
+                    console.log(error.message)
                 })
 
         }
     }
+
 
     render() {
         return (
