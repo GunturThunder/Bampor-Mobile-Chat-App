@@ -39,7 +39,6 @@ class ChatScreen extends Component {
         })
     }
     renderRow = ({ item }) => {
-        // console.log(item)
         return (
             <View style={styles.wrapChat}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Inbox', item)}>
@@ -60,6 +59,7 @@ class ChatScreen extends Component {
         )
     }
     render() {
+        console.log(this.props.navigation.getParam('name'))
         return (
             <ScrollView >
                 <FlatList

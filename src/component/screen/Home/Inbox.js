@@ -106,14 +106,14 @@ class Inbox extends Component {
         // } 
         return result
     }
-    renderRowProfile = ({ item }) => {
-        return (
-            <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop: 5 }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>Zlatan Ibrahimovic</Text>
-                <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../img/profile1.png')} />
-            </View>
-        )
-    }
+    // renderRowProfile = ({ item }) => {
+    //     return (
+    //         <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop: 5 }}>
+    //             <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>Zlatan Ibrahimovic</Text>
+    //             <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../img/profile1.png')} />
+    //         </View>
+    //     )
+    // }
     renderRow = ({ item }) => {
         // console.log(item)
         const Check = () => {
@@ -151,7 +151,7 @@ class Inbox extends Component {
     render() {
         // console.log(props.navigation.getParam('uid'))
         // console.log(this.state.messageList)
-        console.log(auth.currentUser.uid)
+        // console.log(auth.currentUser.uid)
         return (
 
             <View style={styles.wrap}>
@@ -159,11 +159,8 @@ class Inbox extends Component {
                     <View style={{ marginHorizontal: 20, marginVertical: 8 }}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}><Icon style={{ color: 'white', fontSize: 25 }} name="ios-arrow-back" /></TouchableOpacity>
                         <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop: 5 }}>
-                            <FlatList
-                                data={this.state.person.uid}
-                                renderItem={this.renderRowProfile}
-                                keyExtractor={(item) => item.uid}
-                            />
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{this.props.navigation.getParam('name')}</Text>
+                            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../img/profile1.png')} />
                         </View>
                         <Text style={{ fontSize: 12, color: 'white', marginTop: -15 }}>Busy</Text>
                     </View>
