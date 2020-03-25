@@ -3,6 +3,7 @@ import firebase from 'firebase'
 import { View, Text, Image, StyleSheet, TextInput } from 'react-native';
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { db, auth } from '../../Config/Config';
+import Userr from '../Global/Global';
 
 
 const styles = StyleSheet.create({
@@ -31,10 +32,10 @@ class ChatScreen extends Component {
             const data = snapshot.val()
             const user = Object.values(data)
             const result = user.filter(user => user.uid !== current_user);
-            // console.log(result)
             this.setState({
                 user: result
             })
+            console.log(result)
         })
     }
     renderRow = ({ item }) => {
@@ -44,7 +45,7 @@ class ChatScreen extends Component {
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Inbox', item)}>
                     <View style={{ height: 100, marginTop: 20, flexDirection: 'row' }}>
                         <View>
-                            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../img/profile1.png')} />
+                            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={Userr.image ? {uri: Userr.image} : require('../../../img/profile/profile1.png')} />
                         </View>
                         <View style={{ marginLeft: 26, marginHorizontal: 90 }}>
                             <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#848484' }}>{item.name}</Text>

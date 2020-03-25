@@ -67,7 +67,7 @@ class Home extends Component {
                     <View style={{ marginHorizontal: 30, marginTop: 14 }}>
                         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
                             <Text style={{ fontSize: 33, color: 'white', fontWeight: 'bold' }}>Bampor</Text>
-                            <TouchableOpacity onPress={this.handleLogout}><Icon style={{ color: 'white' }} name="settings" /></TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profiles')}><Icon style={{ color: 'white' }} name="settings" /></TouchableOpacity>
                         </View>
                         <View style={{ backgroundColor: '#DDDEFD', borderRadius: 25, marginTop: 24, justifyContent: 'center' }}>
                             <Icon style={{ color: '#6B6B6F', position: 'absolute', marginLeft: 15, paddingTop: 2 }} name="search"></Icon>

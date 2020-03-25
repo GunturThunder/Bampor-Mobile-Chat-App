@@ -9,6 +9,7 @@ import LoginScreen from './src/component/screen/User/Login';
 import RegisterScreen from './src/component/screen/User/Register';
 import InboxScreen from './src/component/screen/Home/Inbox';
 import LocationScreen from './src/component/screen/Location/Location';
+import ProfilesScreen from './src/component/screen/User/Profiles';
 
 const homeNavigator = createStackNavigator({
   // Home : HomeScreen
@@ -41,6 +42,12 @@ const homeNavigator = createStackNavigator({
     screen: LocationScreen,
     navigationOptions:{
       header:false,
+    }
+  },
+  Profiles: {
+    screen: ProfilesScreen,
+    navigationOptions: {
+      header: false,
     }
   }
 })
