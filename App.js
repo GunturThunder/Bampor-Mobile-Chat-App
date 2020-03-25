@@ -1,6 +1,7 @@
-import React,{ Component } from 'react';
+import React,{ Component, useEffect } from 'react';
 import 'react-native-gesture-handler';
 import { View,Text } from 'react-native';
+import SplashScreen from 'react-native-splash-screen'
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 // import HomeScreen from './src/component/screen/Test/Home'
@@ -57,13 +58,14 @@ const AppNavigator = createSwitchNavigator({
 
 const AppContainer = createAppContainer(AppNavigator);
 
-class App extends Component{
-  render(){
-    console.disableYellowBox = true;
-    return(
-      <AppContainer />
-    )
-  }
+function App() {
+  useEffect(() => {
+    SplashScreen.hide()
+  }, []);
+  console.disableYellowBox = true;
+  return (
+    <AppContainer />
+  )
 }
 
 export default App;

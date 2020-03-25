@@ -57,7 +57,7 @@ class User extends Component {
             const data = snapshot.val()
             const user = Object.values(data)
             this.setState({
-                user: user[1]
+                user: user[0]
             })
         })
     }

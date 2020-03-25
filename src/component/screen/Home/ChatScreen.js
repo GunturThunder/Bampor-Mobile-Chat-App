@@ -44,7 +44,7 @@ class ChatScreen extends Component {
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Inbox', item)}>
                     <View style={{ height: 100, marginTop: 20, flexDirection: 'row' }}>
                         <View>
-                            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={Userr.image ? {uri: Userr.image} : require('../../../img/profile/profile1.png')} />
+                            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={{uri:`${item.image}`}} />
                         </View>
                         <View style={{ marginLeft: 26, marginHorizontal: 90 }}>
                             <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#848484' }}>{item.name}</Text>
