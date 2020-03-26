@@ -82,10 +82,10 @@ class Home extends Component {
                         <Tab heading={<TabHeading style={{ backgroundColor: '#9283F8' }}><Text style={{ color: 'white' }}>Chat</Text></TabHeading>}>
                             <ChatScreen navigation={this.props.navigation} />
                         </Tab>
-                        <Tab heading={<TabHeading style={{ backgroundColor: '#9283F8' }}><Text style={{ color: 'white' }}>Status</Text></TabHeading>}>
+                        <Tab heading={<TabHeading style={{ backgroundColor: '#9283F8' }}><Text style={{ color: 'white' }}>Friends Location</Text></TabHeading>}>
                             <StatusScreen navigation={this.props.navigation} />
                         </Tab>
-                        <Tab heading={<TabHeading style={{ backgroundColor: '#9283F8' }}><Text style={{ color: 'white' }}>Call</Text></TabHeading>}>
+                        <Tab heading={<TabHeading style={{ backgroundColor: '#9283F8' }}><Text style={{ color: 'white' }}>Contacts</Text></TabHeading>}>
                             <CallScreen navigation={this.props.navigation} />
                         </Tab>
                     </Tabs>

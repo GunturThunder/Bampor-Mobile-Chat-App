@@ -1,33 +1,46 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import ActionButton from 'react-native-action-button';
-import Icon from 'react-native-vector-icons/Ionicons';
-const styles = StyleSheet.create({
-    actionButtonIcon: {
-      fontSize: 20,
-      height: 22,
-      color: 'white',
-    },
-  });
+import React, { Component } from 'react'
+import MapView from 'react-native-maps';
+import GetLocation from 'react-native-get-location'
+import {db, auth} from '../../Config/Config'
 
 class StatusScreen extends Component {
-    render() {
+    state = {
+        user:[]
+    }
+    componentDidMount(){
+        this.getLocation()
+    }
+    getLocation(){
+        db.ref('/user').on('value', (snapshot) => {
+            const data = snapshot.val()
+            const user = Object.values(data)
+            this.setState({
+                user : user
+            })
+        })
+    }
+    render(){
+        const marker = this.state.user.map((item) => 
+        <MapView.Marker
+        coordinate={{
+            latitude: item.latitude,
+            longitude: item.longitude,
+        }}
+        title={item.name}/>
+        )
         return (
-            <View style={{ flex: 1, backgroundColor: '#f3f3f3' }}>
-                {/* Rest of the app comes ABOVE the action button component !*/}
-                <ActionButton buttonColor="rgba(231,76,60,1)">
-                    <ActionButton.Item buttonColor='#9b59b6' title="New Task" onPress={() => console.log("notes tapped!")}>
-                        <Icon name="md-create" style={styles.actionButtonIcon} />
-                    </ActionButton.Item>
-                    <ActionButton.Item buttonColor='#3498db' title="Notifications" onPress={() => { }}>
-                        <Icon name="md-notifications-off" style={styles.actionButtonIcon} />
-                    </ActionButton.Item>
-                    <ActionButton.Item buttonColor='#1abc9c' title="All Tasks" onPress={() => { }}>
-                        <Icon name="md-done-all" style={styles.actionButtonIcon} />
-                    </ActionButton.Item>
-                </ActionButton>
-            </View>
+            <MapView
+            style={{ flex: 1, width: window.width }} //window pake Dimensions
+            region={{
+                latitude: -6.6210828,
+                longitude:  106.8185388,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421 
+            }} >
+            {marker}
+            </MapView>
         )
     }
 }
+
 export default StatusScreen;

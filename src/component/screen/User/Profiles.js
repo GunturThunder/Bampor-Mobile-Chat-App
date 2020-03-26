@@ -52,12 +52,13 @@ class User extends Component {
     }
 
     getDataUser() {
-        db.ref('/user').on('value', (snapshot) => {
+        db.ref('/user/').child(`${auth.currentUser.uid}/`).on('value', (snapshot) => {
             const current_user = auth.currentUser.uid
             const data = snapshot.val()
             const user = Object.values(data)
+            console.log('data', data)
             this.setState({
-                user: user[0]
+                user: data
             })
         })
     }
@@ -136,6 +137,7 @@ class User extends Component {
 
     render() {
         // console.log(this.state.user[0].uid)
+        console.log(this.state.user)
         return (
             <View style={styles.wrap}>
 
@@ -153,11 +155,11 @@ class User extends Component {
                             <TouchableOpacity onPress={this.changeImage} style={{ width: 95, height: 95, borderRadius: 50, borderWidth: 3, borderColor: '#5579F1', justifyContent: 'center', alignItems: 'center' }}>
                                 {
                                     this.state.upload ? <ActivityIndicator size="large" /> :
-                                        <Image style={{ width: 80, height: 80, borderRadius: 40 }} source={this.state.imageSource} />
+                                        <Image style={{ width: 80, height: 80, borderRadius: 40 }} source={{uri : `${this.state.user.image}`}} />
                                 }
 
                             </TouchableOpacity>
-                            <TextInput value={this.state.user.name} style={{ borderRadius: 10, padding: 10, fontSize: 18, fontWeight: 'bold', color: '#515151', backgroundColor: '#F8F8F8', width: 200, marginTop: 10 }} />
+                            <TextInput value={auth.currentUser.displayName} style={{ borderRadius: 10, padding: 10, fontSize: 18, fontWeight: 'bold', color: '#515151', backgroundColor: '#F8F8F8', width: 200, marginTop: 10 }} />
                             <TouchableOpacity onPress={() => { }} style={{ height: 50, backgroundColor: '#5579F1', paddingHorizontal: 85, marginTop: 10, justifyContent: 'center', borderRadius: 10 }}>
                                 <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Save Profile</Text>
                             </TouchableOpacity>
