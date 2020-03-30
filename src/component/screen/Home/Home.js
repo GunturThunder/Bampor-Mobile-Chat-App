@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
-import { View, Text, Image, StyleSheet, TextInput, FlatList } from 'react-native';
+import { View, Text, Image, StyleSheet, TextInput, FlatList, StatusBar } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { db, auth } from '../../Config/Config';
 import { Icon, Header, Tab, Tabs, TabHeading } from 'native-base';
@@ -60,16 +60,18 @@ class Home extends Component {
     };
 
     render() {
+        // console.log("aaaaa"+this.state.longitude)
         return (
             <View style={styles.wrap}>
+                <StatusBar backgroundColor="#000" barStyle="light-content" />
                 <View>
-                    <Image style={{ position: 'absolute' }} source={require('../../../img/pic1fix.png')} />
+                    <Image style={{ position: 'absolute',height:100 }} source={require('../../../img/pic1fix.png')} />
                     <View style={{ marginHorizontal: 30, marginTop: 14 }}>
                         <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
-                            <Text style={{ fontSize: 33, color: 'white', fontWeight: 'bold' }}>Bampor</Text>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profiles')}><Icon style={{ color: 'white' }} name="settings" /></TouchableOpacity>
+                            <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>Bampor</Text>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profiles')}><Icon style={{ color: 'white',fontSize: 20, }} name="settings" /></TouchableOpacity>
                         </View>
-                        <View style={{ backgroundColor: '#DDDEFD', borderRadius: 25, marginTop: 24, justifyContent: 'center' }}>
+                        <View style={{ backgroundColor: '#DDDEFD', borderRadius: 25, justifyContent: 'center',height:35,marginTop:5 }}>
                             <Icon style={{ color: '#6B6B6F', position: 'absolute', marginLeft: 15, paddingTop: 2 }} name="search"></Icon>
                             <View >
                                 <TextInput onChangeText={this.searchHotelHadle} style={{ placeholderTextColor: '#BDC0C6', marginLeft: 45, marginHorizontal: 30 }} placeholder="Search ..." />

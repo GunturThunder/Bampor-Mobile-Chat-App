@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, FlatList, Alert, ActivityIndicator, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import ActionButton from 'react-native-action-button';
-import { db, auth, time } from '../../Config/Config'
+import { db, auth, time } from '../../Config/Config';
+import ImagePicker from 'react-native-image-picker';
+import Userr from '../Global/Global';
 
 const styles = StyleSheet.create({
     wrap: {
@@ -11,7 +13,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     header: {
-        height: 100,
+        height: 70,
         backgroundColor: '#5579F1'
     },
     content: {
@@ -25,7 +27,7 @@ const styles = StyleSheet.create({
     chat1: {
         backgroundColor: '#5579F1',
         marginTop: 20,
-        width: 200,
+        // width: 200,
         padding: 20,
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 0,
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
     chat2: {
         backgroundColor: '#E2E5F5',
         marginTop: 20,
-        width: 200,
+        // width: 200,
         padding: 20,
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 30,
@@ -59,10 +61,16 @@ class Inbox extends Component {
             person: {
                 name: props.navigation.getParam('name'),
                 uid: props.navigation.getParam('uid'),
+                image: props.navigation.getParam('image'),
+                longitude: props.navigation.getParam('longitude'),
+                latitude: props.navigation.getParam('latitude'),
+                email: props.navigation.getParam('email'),
             },
             textMessage: '',
             messageList: [],
-            user: []
+            user: [],
+            upload: false,
+            imageSource: Userr.image ? { uri: Userr.image } : require('../../../img/profile/profile1.png'),
         }
     }
 
@@ -85,7 +93,10 @@ class Inbox extends Component {
             this.setState({ textMessage: '' })
         }
     }
-    componentDidMount() {
+    async componentDidMount() {
+        await this.getMessages()
+    }
+    getMessages() {
         db.ref('/messages/').child(`${auth.currentUser.uid}/`).child(`${this.state.person.uid}/`)
             .on('child_added', (value) => {
                 console.log(value.val())
@@ -106,14 +117,63 @@ class Inbox extends Component {
         // } 
         return result
     }
-    // renderRowProfile = ({ item }) => {
-    //     return (
-    //         <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop: 5 }}>
-    //             <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>Zlatan Ibrahimovic</Text>
-    //             <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../img/profile1.png')} />
-    //         </View>
-    //     )
-    // }
+    changeImage = () => {
+        const option = {
+            quantity: 0.7, allowsEditing: true, mediaType: 'photo', noData: true,
+            storageOptions: {
+                skipBackup: true, waitUntilSaved: true, path: 'images', cameraRoll: true
+            }
+        }
+        ImagePicker.showImagePicker(option, response => {
+            if (response.error) {
+                console.log(error)
+            }
+            else if (!response.didCancel) {
+                this.setState({
+                    upload: true,
+                    imageSource: { uri: response.uri }
+                }, this.uploadFile)
+            }
+        })
+    }
+    uploadUserImage = (imageUrl) => {
+        Userr.image = imageUrl;
+        db.ref('/messages/').child(`${auth.currentUser.uid}/`).child(`${this.state.person.uid}/` + msgId).push({ image: imageUrl });
+        Alert.alert('Succses', 'Image Changed Succsessful')
+        this.setState({ upload: false, imageSource: { uri: imageUrl } })
+    }
+    uploadFile = async () => {
+        const file = await this.uriToBlob(this.state.imageSource.uri);
+        firebase.storage().ref(`images_shere/${file._data.name}.png/`)
+            .put(file)
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => this.uploadUserImage(url))
+            .catch(error => {
+                this.setState({
+                    upload: false,
+                    imageSource: require('../../../img/profile/profile1.png')
+                });
+                Alert.alert('Error', 'Error On Upload Image')
+            })
+
+    }
+    uriToBlob = (uri) => {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+
+            xhr.onerror = function () {
+                reject(new Error('Error on upload image'));
+            };
+
+            xhr.responseType = 'blob';
+            xhr.open('GET', uri, true);
+            xhr.send(null);
+
+        })
+    }
     renderRow = ({ item }) => {
         // console.log(item)
         const Check = () => {
@@ -150,30 +210,46 @@ class Inbox extends Component {
     }
     render() {
         // console.log(props.navigation.getParam('uid'))
-        // console.log(this.state.messageList)
-        // console.log(auth.currentUser.uid)
+        // console.log(this.state.user.image)
+        // console.log(this.state.user)
+        // console.log('image '+this.state.user.image)
+        // console.log('uid '+this.state.user.uid)
+        // console.log('name '+this.state.person.image)
+
+
+        // console.log("Allllll"+this.state.person.latitude)
         return (
 
             <View style={styles.wrap}>
                 <View style={styles.header}>
                     <View style={{ marginHorizontal: 20, marginVertical: 8 }}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}><Icon style={{ color: 'white', fontSize: 25 }} name="ios-arrow-back" /></TouchableOpacity>
-                        <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginTop: 5 }}>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{this.props.navigation.getParam('name')}</Text>
-                            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={require('../../../img/profile1.png')} />
+                        <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', marginTop: 5 }}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}><Icon style={{ color: 'white', fontSize: 25 }} name="md-arrow-back" /></TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('FriendsProfiles', this.state.person)}>
+                                <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{this.props.navigation.getParam('name')}</Text>
+                            </TouchableOpacity>
+                            <Image style={{ width: 50, height: 50, borderRadius: 50 }} source={{ uri: this.state.person.image }} />
                         </View>
-                        <Text style={{ fontSize: 12, color: 'white', marginTop: -15 }}>Busy</Text>
+                        {/* <Text style={{ fontSize: 12, color: 'white',alignSelf:'flex-end',flexDirection:'row',marginRight:12,marginTop:5 }}>Busy</Text> */}
                     </View>
                 </View>
                 <View style={styles.content}>
                     <View style={styles.contentChat}>
-                        <View style={{ height: 420, marginTop: 20 }}>
-                            <ScrollView showsHorizontalScrollIndicator={false} >
+                        <View style={{ height: 460, marginTop: 20 }}>
+                            <ScrollView ref={ref => (this.flatList = ref)}
+                                onContentSizeChange={() =>
+                                    this.flatList.scrollToEnd({ animated: true })
+                                }
+                                onLayout={() => this.flatList.scrollToEnd({ animated: true })} showsHorizontalScrollIndicator={false} >
                                 <FlatList
                                     data={this.state.messageList}
                                     renderItem={this.renderRow}
                                     keyExtractor={(item, index) => index.toString()}
                                 />
+                                {
+                                    this.state.upload ? <ActivityIndicator size="large" /> :
+                                        <Image source={{ uri: `${this.state.user.image}` }} />
+                                }
                             </ScrollView>
                         </View>
                         <View style={styles.keyboard}>
@@ -194,10 +270,12 @@ class Inbox extends Component {
                                     <Icon name="ios-happy" style={styles.actionButtonIcon} />
                                 </ActionButton.Item>
                                 <ActionButton.Item buttonColor='#3498db' title="Picture">
-                                    <Icon name="ios-camera" style={styles.actionButtonIcon} />
+                                    <TouchableOpacity onPress={this.changeImage}>
+                                        <Icon name="ios-camera" style={styles.actionButtonIcon} />
+                                    </TouchableOpacity>
                                 </ActionButton.Item>
-                                <ActionButton.Item buttonColor='#1abc9c' title="Shere Location">
-                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Location')}><Icon name="ios-compass" style={styles.actionButtonIcon} /></TouchableOpacity>
+                                <ActionButton.Item buttonColor='#1abc9c' title={this.props.navigation.getParam('name') + `'s Location`}>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Location', this.state.person)}><Icon name="ios-compass" style={styles.actionButtonIcon} /></TouchableOpacity>
                                 </ActionButton.Item>
                             </ActionButton>
                         </View>

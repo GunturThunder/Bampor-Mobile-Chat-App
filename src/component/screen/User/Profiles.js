@@ -137,7 +137,6 @@ class User extends Component {
 
     render() {
         // console.log(this.state.user[0].uid)
-        console.log(this.state.user)
         return (
             <View style={styles.wrap}>
 

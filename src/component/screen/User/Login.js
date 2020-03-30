@@ -117,7 +117,7 @@ class Login extends Component {
                             <Input placeholder="Email" onChangeText={email => this.setState({ email })} value={this.state.email} />
                         </Item>
                         <Item>
-                            <Input placeholder="Password" onChangeText={password => this.setState({ password })} value={this.state.password} />
+                            <Input secureTextEntry placeholder="Password" onChangeText={password => this.setState({ password })} value={this.state.password} />
                         </Item>
                     </Form>
 
@@ -126,7 +126,7 @@ class Login extends Component {
                             SIGN IN
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')} style={{ justifyContent: 'center', alignItems: 'center' }}><Text>Dinn't Have Account Yet ?, Register Here</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')} style={{ justifyContent: 'center', alignItems: 'center' }}><Text>Don't Have Account Yet ?, Register Here</Text></TouchableOpacity>
                 </Content>
             </View>
         )

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import MapView from 'react-native-maps';
 import GetLocation from 'react-native-get-location'
-import {db, auth} from '../../Config/Config'
+import {db, auth} from '../../Config/Config';
+import { StatusBar } from 'react-native'
 
 class StatusScreen extends Component {
     state = {

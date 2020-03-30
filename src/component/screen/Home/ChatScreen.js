@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase'
-import { View, Text, Image, StyleSheet, TextInput } from 'react-native';
+import { View, Text, Image, StyleSheet, TextInput,StatusBar } from 'react-native';
 import { TouchableOpacity, ScrollView, FlatList } from 'react-native-gesture-handler';
 import { db, auth } from '../../Config/Config';
 import Userr from '../Global/Global';
@@ -35,12 +35,12 @@ class ChatScreen extends Component {
             this.setState({
                 user: result
             })
-            console.log(result)
         })
     }
     renderRow = ({ item }) => {
         return (
             <View style={styles.wrapChat}>
+                <StatusBar backgroundColor="#000" barStyle="light-content" />
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Inbox', item)}>
                     <View style={{ height: 100, marginTop: 20, flexDirection: 'row' }}>
                         <View>
@@ -59,7 +59,7 @@ class ChatScreen extends Component {
         )
     }
     render() {
-        console.log(this.props.navigation.getParam('name'))
+        // console.log(this.props.navigation.getParam('name')
         return (
             <ScrollView >
                 <FlatList

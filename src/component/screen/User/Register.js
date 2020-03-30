@@ -103,7 +103,7 @@ class Register extends Component {
                             displayName: this.state.name,
                             photoURL: "http://linkphoto.com"
                         }).then((s) => {
-                            this.props.navigation.navigate('Login')
+                            this.props.navigation.navigate('Home')
                         })
                     }
 
@@ -140,7 +140,7 @@ class Register extends Component {
                                 <Input placeholder="Email" onChangeText={email => this.setState({ email })} value={this.state.email} />
                             </Item>
                             <Item>
-                                <Input placeholder="Password" onChangeText={password => this.setState({ password })} value={this.state.password} />
+                                <Input secureTextEntry placeholder="Password" onChangeText={password => this.setState({ password })} value={this.state.password} />
                             </Item>
                         </Form>
 
